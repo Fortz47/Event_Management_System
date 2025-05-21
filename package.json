@@ -1,0 +1,29 @@
+{
+  "name": "event_management_system",
+  "version": "1.0.0",
+  "description": "event management platform that allows users to create, manage, and track events, including registration, ticketing, and analytics",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fortz47/Event_Management_System.git"
+  },
+  "keywords": [
+    "event",
+    "management",
+    "ticketing",
+    "api"
+  ],
+  "author": "Akaolisa Atuokwu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fortz47/Event_Management_System/issues"
+  },
+  "homepage": "https://github.com/Fortz47/Event_Management_System#readme",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
