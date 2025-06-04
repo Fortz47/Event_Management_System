@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 
 interface UserAttributes {
   id?: number;
-  name: string;
+  name?: string;
   email: string;
   password: string;
   role: string;
@@ -13,7 +13,7 @@ interface UserAttributes {
 
 type UserCreationAttributes = Optional<
   UserAttributes,
-  "id" | "role" | "createdAt" | "updatedAt"
+  "id" | "name" | "role" | "createdAt" | "updatedAt"
 >;
 
 export { UserAttributes, UserCreationAttributes };

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { DateTime } from "luxon";
+import bcrypt from "bcrypt";
 import {
   UserAttributes as IUser,
   UserCreationAttributes as ICreationUser,
@@ -24,7 +25,7 @@ class User extends Model<IUser, ICreationUser> implements IUser {
         },
         name: {
           type: DataTypes.STRING,
-          allowNull: false,
+          allowNull: true,
         },
         email: {
           type: DataTypes.STRING,
@@ -40,14 +41,12 @@ class User extends Model<IUser, ICreationUser> implements IUser {
         password: {
           type: DataTypes.STRING,
           allowNull: false,
-          set(value: string) {
-            // Assuming you will hash the password before saving
-            this.setDataValue("password", value); // Replace with actual hashing logic
+          async set(value: string) {
+            // saving the password as a hash
+            const saltRounds = 10;
+            const hashedPassword = bcrypt.hashSync(value, saltRounds);
+            this.setDataValue("password", hashedPassword);
           },
-          // onUpdate: (value: string): => {
-          //   // This is where you would hash the password before updating
-          //   this.setDataValue("password_hash", value); // Replace with actual hashing logic
-          // }
         },
         role: {
           type: DataTypes.STRING,

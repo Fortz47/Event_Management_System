@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-// import { validationResult } from 'express-validator';
 import { createSecretKey } from "crypto";
 import { SignJWT } from "jose";
 import { UserService } from "../../UserManagement/services/UserService";
@@ -8,97 +7,90 @@ import { getToken } from "../../../utils/jwt.utils";
 import redisClient from "../../../configs/redis.config";
 import { parseTime } from "../../../utils";
 import { CustomJWTPayload } from "../../../interfaces";
-import { createUserDto } from "../../../schemas/users.schema";
+import { createUserDto, loginUserDto } from "../../../schemas/users.schema";
 
 class AuthControlller {
-  static async register(req: Request, res: Response) {
+  async register(req: Request, res: Response) {
     const data: createUserDto = req.body;
-    const user = await UserService.getUserByEmail(data.email);
-    if (user) {
-      res.status(409).json({ error: "Email already in use." });
+    try {
+      const existingUser = await UserService.getUserByEmail(data.email);
+      if (existingUser) {
+        res.status(400).json({ message: "Email already in use!" });
+        return;
+      }
+      const newUser = await UserService.createUser({ ...data });
+      res.status(201).json({ message: "Success." });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create user", error });
+    }
+  }
+
+  async login(req: Request, res: Response) {
+    try {
+      const _token = await getToken(req, res);
+      if (_token) {
+        res.json({ message: "Already Logged in." });
+        return;
+      }
+      const data: loginUserDto = req.body;
+      const validUser = await UserService.validateUserWithPassword(data);
+      if (!validUser) {
+        res.status(401).json({ error: "Invalid email or password." });
+        return;
+      }
+      const userId = validUser.id.toString();
+      const token = await generateToken(userId, validUser.email);
+
+      res.json({ message: "Login successful.", token });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({
+          error: "An unexpected error occurred. Please try again later.",
+        });
+      }
+    }
+  }
+
+  async loginAdmin(req: Request, res: Response) {
+    const payload = await getToken(req, res);
+    if (payload && payload.role === "admin") {
+      res.json({ message: "Already Logged in." });
       return;
     }
 
-    const newUser = await UserService.createUser(data);
-    if (!newUser) {
-      const error = "An unexpected error occurred. Please try again later.";
-      return res.status(500).json({ error });
-    }
-
-    res.json({ msg: "Success." });
-  }
-
-  static async login(req: Request, res: Response) {
-    const isLoggedIn = await getToken(req, res);
-    if (isLoggedIn) {
-      return res.json({ msg: "Already Logged in." });
-    }
-
-    if (!validateCredentials(req, res)) return;
-
-    const { email, username, password } = req.body;
-    const emailOrUsername = email || username;
-    const credentials: Icredentials = { emailOrUsername, password };
-    const validUser = await UserService.validateUser(credentials);
+    const credentials: loginUserDto = req.body;
+    const validUser = await UserService.validateUserWithPassword(credentials);
     if (!validUser) {
-      return res.status(401).json({ error: "Invalid email or password." });
-    }
-    const userId = validUser._id.toString();
-    const token = await generateToken(userId, validUser.email);
-
-    res.json({ msg: "Login successful.", token });
-  }
-
-  static async loginAdmin(req: Request, res: Response) {
-    const payload = await getToken(req, res);
-    if (payload && payload.role === "admin") {
-      return res.json({ msg: "Already Logged in." });
-    }
-
-    if (!validateCredentials(req, res)) return;
-
-    const { email, username, password } = req.body;
-    const emailOrUsername = email || username;
-    const credentials: Icredentials = { emailOrUsername, password };
-    const validUser = await UserService.validateUser(credentials);
-    if (!validUser) {
-      return res.status(401).json({ error: "Invalid email or password." });
+      res.status(401).json({ error: "Invalid email or password." });
+      return;
     }
     if (validUser.role !== "admin") {
-      return res.status(401).json({ error: "Admin only." });
+      res.status(401).json({ error: "Admin only." });
+      return;
     }
-    const userId = validUser._id.toString();
+    const userId = validUser.id.toString();
     const token = await generateToken(userId, validUser.email, "admin");
 
-    res.json({ msg: "Login successful.", token });
+    res.json({ message: "Login successful.", token });
   }
 
   // must be a protected route, jwtGuard
-  static async logout(req: Request, res: Response) {
-    const authHeader = req.headers.authorization;
+  async logout(req: Request, res: Response) {
+    const authHeader = req.headers.authorization!;
     const token = authHeader.split(" ")[1];
     try {
       await removeToken(token);
     } catch (error) {
-      const msg = "An unexpected error occurred. Please try again later";
-      return res.status(500).json({ error: msg });
+      const message = "An unexpected error occurred. Please try again later";
+      res.status(500).json({ error: message });
+      return;
     }
-    res.json({ msg: "Logout succesful." });
+    res.json({ message: "Logout succesful." });
   }
 }
 
-// validate request body
-// function validateCredentials(req: Request, res: Response) {
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     res.statusCode = 400;
-//     res.json({ errors: errors.array() });
-//     return false;
-//   }
-//   return true;
-// }
-
-// generate JWT token
 async function generateToken(
   id: string,
   email: string,
@@ -109,7 +101,7 @@ async function generateToken(
     role = "user";
     expTime = "2 days";
   }
-  const secret = createSecretKey(Buffer.from(JWT_SECRET, "utf-8"));
+  const secret = createSecretKey(Buffer.from(JWT_SECRET!, "utf-8"));
   const payload: CustomJWTPayload = { id, email, role };
   const token = await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })

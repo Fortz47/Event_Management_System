@@ -5,6 +5,7 @@ import {
   createUserSchema,
   updateUserSchema,
 } from "../../../schemas/users.schema";
+import { jwtGuard } from "../../../middleware/jwt.middleware";
 
 class UserRoutes extends UserController {
   private router: Router;
@@ -20,7 +21,7 @@ class UserRoutes extends UserController {
   }
 
   private initializeRoutes() {
-    this.router.get("/", this.getAllUsers);
+    this.router.get("/", jwtGuard, this.getAllUsers);
     this.router.route("/:id").get(this.getUserById);
     this.router.get("/:id", this.getUserById);
     this.router.post("/", validateRequest(createUserSchema), this.createUser);
@@ -34,5 +35,5 @@ class UserRoutes extends UserController {
   }
 }
 
-const UserRouter = new UserRoutes().getRouter();
-export default UserRouter;
+const userRouter = new UserRoutes().getRouter();
+export default userRouter;

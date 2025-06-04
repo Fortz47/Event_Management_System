@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/UserService";
+import { loginUserDto } from "../../../schemas/users.schema";
 
 class UserController {
   // Get all users
@@ -8,7 +9,10 @@ class UserController {
       const users = await UserService.getAllUsers();
       res.json(users);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch users", error });
+      res.status(500).json({
+        message: "An unexpected error occurred. Please try again later.",
+        error,
+      });
     }
   }
 
@@ -23,7 +27,10 @@ class UserController {
       }
       res.json(user);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch user", error });
+      res.status(500).json({
+        message: "An unexpected error occurred. Please try again later.",
+        error,
+      });
     }
   }
 
@@ -39,6 +46,24 @@ class UserController {
       res.status(201).json(newUser);
     } catch (error) {
       res.status(400).json({ message: "Failed to create user", error });
+    }
+  }
+
+  // Validate user credentials
+  async validateUser(req: Request, res: Response) {
+    try {
+      const credentials: loginUserDto = req.body;
+      const user = await UserService.validateUserWithPassword(credentials);
+      if (!user) {
+        res.status(401).json({ message: "Invalid email or password" });
+        return;
+      }
+      res.json({ message: "Login successful" });
+    } catch (error) {
+      res.status(500).json({
+        message: "An unexpected error occurred. Please try again later.",
+        error,
+      });
     }
   }
 
@@ -68,7 +93,10 @@ class UserController {
       }
       res.json({ message: "User deleted successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to delete user", error });
+      res.status(500).json({
+        message: "An unexpected error occurred. Please try again later.",
+        error,
+      });
     }
   }
 }
