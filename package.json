@@ -24,20 +24,32 @@
     "url": "https://github.com/Fortz47/Event_Management_System/issues"
   },
   "homepage": "https://github.com/Fortz47/Event_Management_System#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jose": "^6.0.11",
+    "luxon": "^3.6.1",
+    "sequelize": "^6.37.7"
+  },
   "devDependencies": {
+    "@eslint/compat": "^1.2.9",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.27.0",
+    "@eslint/migrate-config": "^1.5.0",
     "@types/express": "^5.0.2",
     "@types/luxon": "^3.6.2",
     "@types/node": "^22.15.21",
     "@types/sequelize": "^4.28.20",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.0",
     "mysql2": "^3.14.1",
+    "prettier": "3.5.3",
     "sequelize-cli": "^6.6.3",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "luxon": "^3.6.1",
-    "sequelize": "^6.37.7"
   }
 }
