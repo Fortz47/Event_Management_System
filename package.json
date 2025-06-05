@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Fortz47/Event_Management_System#readme",
   "dependencies": {
+    "axios": "^1.9.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

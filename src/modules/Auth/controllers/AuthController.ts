@@ -23,6 +23,13 @@ class AuthControlller {
     } catch (error) {
       res.status(400).json({ message: "Failed to create user", error });
     }
+    // try {
+    //   const _res = await authServiceClient.post("/register", data);
+    //   res.statusCode = _res.status;
+    //   res.json(_res.data);
+    // } catch (error) {
+    //   res.status(500).json({ error });
+    // }
   }
 
   async login(req: Request, res: Response) {
@@ -33,18 +40,31 @@ class AuthControlller {
         return;
       }
       const data: loginUserDto = req.body;
-      const validUser = await UserService.validateUserWithPassword(data);
-      if (!validUser) {
+      // const _res = await authServiceClient.post("/login", data);
+      // console.log("\n\n\nResponse from auth service:", _res);
+      // res.statusCode = _res.status;
+      // if (_res.status !== 200) {
+      //   res.json(_res.data);
+      //   return;
+      // }
+      const user = await UserService.validateUserWithPassword(data);
+      if (!user) {
         res.status(401).json({ error: "Invalid email or password." });
         return;
       }
-      const userId = validUser.id.toString();
-      const token = await generateToken(userId, validUser.email);
+      const userId = user.id.toString();
+      const token = await generateToken(userId, user.email);
+      res.cookie("token", token, {
+        httpOnly: false, // access via JS (more secure)
+        secure: process.env.NODE_ENV === "production", // HTTPS only in production
+        sameSite: "strict", // Prevents CSRF
+        maxAge: 60 * 60 * 1000, // 1 hour
+      });
 
       res.json({ message: "Login successful.", token });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error });
       } else {
         res.status(500).json({
           error: "An unexpected error occurred. Please try again later.",

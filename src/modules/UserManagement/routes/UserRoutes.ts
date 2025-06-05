@@ -22,16 +22,16 @@ class UserRoutes extends UserController {
 
   private initializeRoutes() {
     this.router.get("/", jwtGuard, this.getAllUsers);
-    this.router.route("/:id").get(this.getUserById);
     this.router.get("/:id", this.getUserById);
     this.router.post("/", validateRequest(createUserSchema), this.createUser);
     this.router.put("/:id", validateRequest(createUserSchema), this.updateUser);
     this.router.patch(
       "/:id",
+      jwtGuard,
       validateRequest(updateUserSchema),
       this.updateUser
     );
-    this.router.delete("/:id", this.deleteUser);
+    this.router.delete("/:id", jwtGuard, this.deleteUser);
   }
 }
 
