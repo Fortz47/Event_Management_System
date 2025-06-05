@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import { config } from "dotenv";
-import initializeModels from "../modules/UserManagement/models";
+import initializeModels from "../modules/User/models";
 
 // Load environment variables from .env file
 config();

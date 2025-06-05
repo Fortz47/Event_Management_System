@@ -37,18 +37,6 @@ export class UserService {
     }
   }
 
-  // Get a user by email and password
-  // static async getUserByEmailAndPassword(
-  //   email: string,
-  //   password: string,
-  //   options?: FindOptions
-  // ) {
-  //   return await User.findOne({
-  //     where: { email, password_hash: password }, // Assuming password is hashed
-  //     ...options,
-  //   });
-  // }
-
   // Get all users
   static async getAllUsers(options?: FindOptions) {
     return await User.findAll(options);
@@ -60,7 +48,7 @@ export class UserService {
       const hash = await bcrypt.hash(data.password, 10);
       data.password = hash;
     }
-    const [updatedRows] = await User.update(data, {
+    const updatedRows = await User.update(data, {
       where: { id },
     });
     return updatedRows;

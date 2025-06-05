@@ -5,7 +5,6 @@ import {
   createUserSchema,
   updateUserSchema,
 } from "../../../schemas/users.schema";
-import { jwtGuard } from "../../../middleware/jwt.middleware";
 
 class UserRoutes extends UserController {
   private router: Router;
@@ -21,17 +20,16 @@ class UserRoutes extends UserController {
   }
 
   private initializeRoutes() {
-    this.router.get("/", jwtGuard, this.getAllUsers);
+    this.router.get("/", this.getAllUsers);
     this.router.get("/:id", this.getUserById);
     this.router.post("/", validateRequest(createUserSchema), this.createUser);
     this.router.put("/:id", validateRequest(createUserSchema), this.updateUser);
     this.router.patch(
       "/:id",
-      jwtGuard,
       validateRequest(updateUserSchema),
       this.updateUser
     );
-    this.router.delete("/:id", jwtGuard, this.deleteUser);
+    this.router.delete("/:id", this.deleteUser);
   }
 }
 

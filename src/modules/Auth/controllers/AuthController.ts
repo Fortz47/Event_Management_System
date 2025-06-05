@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createSecretKey } from "crypto";
 import { SignJWT } from "jose";
-import { UserService } from "../../UserManagement/services/UserService";
+import { UserService } from "../../User/services/UserService";
 import { JWT_SECRET } from "../../../configs/secrets.config";
 import { getToken } from "../../../utils/jwt.utils";
 import redisClient from "../../../configs/redis.config";
@@ -139,7 +139,7 @@ async function cacheToken(token: string, userId: string, exp: number) {
   await redisClient.set(key, userId, exp);
 }
 
-async function removeToken(token: string) {
+export async function removeToken(token: string) {
   const key = `auth_${token}`;
   await redisClient.del(key);
 }

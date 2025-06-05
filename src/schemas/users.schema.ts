@@ -14,7 +14,11 @@ const createUserSchema = z.object({
   // role: z.enum(["user", "admin"]).default("user"),
 });
 
-const updateUserSchema = createUserSchema.partial();
+const updateUserSchema = createUserSchema
+  .extend({
+    name: z.string().trim().min(1).max(100, "Name too long"),
+  })
+  .partial();
 
 const loginUserSchema = z.object({
   email: z.string().trim().toLowerCase().email("Invalid email format"),
