@@ -12,6 +12,9 @@ class User extends Model<IUser, ICreationUser> implements IUser {
   declare email: string;
   declare password: string;
   declare role: string;
+  declare profilePicture?: string;
+  declare eventsOrganized?: any[];
+  declare eventsParticipated?: any[];
   declare readonly createdAt: DateTime;
   declare readonly updatedAt: DateTime;
 
@@ -56,6 +59,18 @@ class User extends Model<IUser, ICreationUser> implements IUser {
             isIn: [["user", "admin", "superadmin"]], // Example roles
           },
         },
+        profilePicture: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        // eventsOrganized: {
+        //   type: DataTypes.JSONB, // Assuming this is an array of event IDs or objects
+        //   allowNull: true,
+        // },
+        // eventsParticipated: {
+        //   type: DataTypes.JSONB, // Assuming this is an array of event IDs or objects
+        //   allowNull: true,
+        // },
       },
       {
         sequelize,

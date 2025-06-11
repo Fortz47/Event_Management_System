@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import User from "../models/User";
+import User from "../models/UserModel";
 import { CreateOptions, DestroyOptions, FindOptions } from "sequelize";
 import { UserCreationAttributes as ICreateUser } from "../../../interfaces/user.interface";
 import { loginUserDto } from "../../../schemas/users.schema";

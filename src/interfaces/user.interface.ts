@@ -7,13 +7,23 @@ interface UserAttributes {
   email: string;
   password: string;
   role: string;
+  profilePicture?: string;
+  eventsOrganized?: any[];
+  eventsParticipated?: any[];
   createdAt?: DateTime;
   updatedAt?: DateTime;
 }
 
 type UserCreationAttributes = Optional<
   UserAttributes,
-  "id" | "name" | "role" | "createdAt" | "updatedAt"
+  | "id"
+  | "name"
+  | "role"
+  | "createdAt"
+  | "updatedAt"
+  | "profilePicture"
+  | "eventsOrganized"
+  | "eventsParticipated"
 >;
 
 export { UserAttributes, UserCreationAttributes };
