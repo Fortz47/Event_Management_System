@@ -28,7 +28,7 @@ http://localhost:5000/
 1. **Clone the repository:**
 
    ```bash
-   git clone [https://github.com/Fortz47/Event_Management_System](https://github.com/Fortz47/Event_Management_System)
+   git clone https://github.com/Fortz47/Event_Management_System
    cd Event_Management_System
    ```
 
