@@ -2,6 +2,10 @@
 
 A backend-focused Node.js/Express application for managing events, participants, payments, and tickets.
 
+## base URL
+
+http://localhost:5000/
+
 ## Features
 
 - User authentication (JWT)
@@ -27,6 +31,8 @@ A backend-focused Node.js/Express application for managing events, participants,
    git clone <[https://github.com/Fortz47/Event_Management_System](https://github.com/Fortz47/Event_Management_System)>
    cd Event_Management_System
    ```
+
+**Note: This app was deveoped in Linux environment**
 
 2. **Install dependencies:**
 
