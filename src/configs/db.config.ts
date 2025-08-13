@@ -6,12 +6,12 @@ import { setupEventAssociations } from "../modules/Event/models/event.associatio
 // Load environment variables from .env file
 config();
 
-const username = process.env.DB_USERNAME || "auth_dev";
-const pwd = process.env.DB_PASSWORD || "auth_dev_pwd";
-const dbname = process.env.DB_NAME || "auth_dev_db";
-const host = process.env.DB_HOST || "localhost";
-const dialect = process.env.DB_DIALECT || "mysql";
-const port = process.env.DB_PORT || 3306;
+const username = process.env.DB_USERNAME;
+const pwd = process.env.DB_PASSWORD;
+const dbname = process.env.DB_NAME;
+const host = process.env.DB_HOST;
+const dialect = process.env.DB_DIALECT;
+const port = process.env.DB_PORT;
 
 const URI = `${dialect}://${username}:${pwd}@${host}:${port}/${dbname}`;
 const sequelize = new Sequelize(URI);
