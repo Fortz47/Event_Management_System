@@ -1,7 +1,7 @@
 import { Router } from "express";
 import AuthControlller from "../controllers/AuthController";
 import { jwtGuard } from "../../../middleware/jwt.middleware";
-import { validateRequest } from "../../../middleware/validate-user.middleware";
+import { validateRequest } from "../../../middleware/validate-req.middleware";
 import {
   createUserSchema,
   loginUserSchema,

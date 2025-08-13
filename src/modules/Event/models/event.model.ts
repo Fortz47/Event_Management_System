@@ -1,9 +1,22 @@
-import { DateTime } from "luxon";
-import { Model, Sequelize, DataTypes } from "sequelize";
+import {
+  Model,
+  Sequelize,
+  DataTypes,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToGetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+} from "sequelize";
 import {
   EventAttributes,
   EventCreationAttributes,
 } from "../../../interfaces/event.interface";
+import { EventParticipant } from "./event-participant.model";
+import { EventOrganizer } from "./event-organizer.model";
 
 class Event
   extends Model<EventAttributes, EventCreationAttributes>
@@ -16,16 +29,57 @@ class Event
   declare coOrganizers?: any[];
   declare participants?: any[];
   declare maxParticipants?: number;
-  declare startDate: DateTime;
-  declare endDate: DateTime;
+  declare startDate: Date;
+  declare endDate: Date;
   declare mode: "virtual" | "Hybrid" | "in-person";
   declare location?: string;
   declare isPublic?: boolean;
   declare isCancelled?: boolean;
   declare isCompleted?: boolean;
-  declare isActive?: boolean;
-  declare readonly createdAt: DateTime;
-  declare readonly upDateTimedAt: DateTime;
+  declare isDisabled?: boolean;
+  declare isDeleted?: boolean;
+  declare readonly createdAt: Date;
+  declare readonly upDateTimedAt: Date;
+
+  declare getAttendees: BelongsToManyGetAssociationsMixin<EventParticipant>;
+  declare addAttendee: BelongsToManyAddAssociationMixin<
+    EventParticipant,
+    string
+  >;
+  declare addAttendees: BelongsToManyAddAssociationsMixin<
+    EventParticipant,
+    string
+  >;
+  declare removeAttendee: BelongsToManyRemoveAssociationMixin<
+    EventParticipant,
+    string
+  >;
+  declare removeAttendees: BelongsToManyRemoveAssociationsMixin<
+    EventParticipant,
+    string
+  >;
+
+  declare getOrganizer: BelongsToGetAssociationMixin<EventOrganizer>;
+  declare createOrganizer: BelongsToCreateAssociationMixin<EventOrganizer>;
+  declare setOrganizer: BelongsToSetAssociationMixin<EventOrganizer, string>;
+
+  declare getCo_organizers: BelongsToManyGetAssociationsMixin<EventOrganizer>;
+  declare addCo_organizer: BelongsToManyAddAssociationMixin<
+    EventOrganizer,
+    string
+  >;
+  declare addCo_organizers: BelongsToManyAddAssociationsMixin<
+    EventOrganizer,
+    string
+  >;
+  declare removeCo_organizer: BelongsToManyRemoveAssociationMixin<
+    EventOrganizer,
+    string
+  >;
+  declare removeCo_organizers: BelongsToManyRemoveAssociationsMixin<
+    EventOrganizer,
+    string
+  >;
 
   static initialize(sequelize: Sequelize) {
     Event.init(
@@ -43,18 +97,18 @@ class Event
           type: DataTypes.TEXT,
           allowNull: true,
         },
-        organizerId: {
-          type: DataTypes.INTEGER.UNSIGNED,
-          allowNull: false,
-        },
-        coOrganizers: {
-          type: DataTypes.JSON,
-          allowNull: true,
-        },
-        participants: {
-          type: DataTypes.JSON, // Assuming participants is an array of objects
-          allowNull: true,
-        },
+        // organizerId: {
+        //   type: DataTypes.INTEGER.UNSIGNED,
+        //   allowNull: false,
+        // },
+        // coOrganizers: {
+        //   type: DataTypes.JSON,
+        //   allowNull: true,
+        // },
+        // participants: {
+        //   type: DataTypes.JSON, // Assuming participants is an array of objects
+        //   allowNull: true,
+        // },
         maxParticipants: {
           type: DataTypes.INTEGER.UNSIGNED,
           allowNull: true,
@@ -87,9 +141,13 @@ class Event
           type: DataTypes.BOOLEAN,
           defaultValue: false, // Default to not completed
         },
-        isActive: {
+        isDisabled: {
           type: DataTypes.BOOLEAN,
-          defaultValue: true, // Default to active
+          defaultValue: false, // Default to not disabled
+        },
+        isDeleted: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false, // Default to not deleted
         },
       },
       {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import UserController from "../controllers/UserController";
-import { validateRequest } from "../../../middleware/validate-user.middleware";
+import { validateRequest } from "../../../middleware/validate-req.middleware";
 import {
   createUserSchema,
   updateUserSchema,

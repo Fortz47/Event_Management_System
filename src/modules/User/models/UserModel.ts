@@ -1,12 +1,18 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  Model,
+  Sequelize,
+} from "sequelize";
 import { DateTime } from "luxon";
 import bcrypt from "bcrypt";
 import {
   UserAttributes as IUser,
   UserCreationAttributes as ICreationUser,
 } from "../../../interfaces/user.interface";
+import Ticket from "../../Ticket/models/ticket.model";
 
-class User extends Model<IUser, ICreationUser> implements IUser {
+class User extends Model<IUser, ICreationUser> {
   declare id: number;
   declare name: string;
   declare email: string;
@@ -17,6 +23,9 @@ class User extends Model<IUser, ICreationUser> implements IUser {
   declare eventsParticipated?: any[];
   declare readonly createdAt: DateTime;
   declare readonly updatedAt: DateTime;
+
+  // setup mixin
+  // declare getTickets: HasManyGetAssociationsMixin<Ticket>;
 
   static initialize(sequelize: Sequelize) {
     User.init(

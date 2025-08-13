@@ -61,6 +61,8 @@ class AuthControlller {
         maxAge: 60 * 60 * 1000, // 1 hour
       });
 
+      req.user = user;
+
       res.json({ message: "Login successful.", token });
     } catch (error) {
       if (error instanceof Error) {
@@ -93,6 +95,7 @@ class AuthControlller {
     const userId = validUser.id.toString();
     const token = await generateToken(userId, validUser.email, "admin");
 
+    req.user = validUser;
     res.json({ message: "Login successful.", token });
   }
 

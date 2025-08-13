@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { Model, Sequelize } from "sequelize";
 
 export class EventOrganizer extends Model {
   declare eventId: string;
@@ -8,16 +8,7 @@ export class EventOrganizer extends Model {
 
   static initialize(sequelize: Sequelize) {
     EventOrganizer.init(
-      {
-        // eventId: {
-        //   type: DataTypes.UUID,
-        //   primaryKey: true,
-        // },
-        // userId: {
-        //   type: DataTypes.INTEGER.UNSIGNED,
-        //   primaryKey: true,
-        // },
-      },
+      {},
       {
         sequelize,
         modelName: "EventOrganizer",

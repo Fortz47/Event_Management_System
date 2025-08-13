@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import { config } from "dotenv";
 import initializeModels from "../configs";
-import { setupEventAssociations } from "../modules/Event/models/associations";
+import { setupEventAssociations } from "../modules/Event/models/event.associations";
 
 // Load environment variables from .env file
 config();
@@ -24,7 +24,7 @@ async function connectDB() {
     if (process.env.NODE_ENV === "development") {
       initializeModels(sequelize);
       setupEventAssociations();
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ alter: true });
       console.log("Database synchronized successfully - Development!");
     }
   } catch (error) {

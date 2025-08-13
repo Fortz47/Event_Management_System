@@ -1,24 +1,21 @@
 import { Optional } from "sequelize";
-import { DateTime } from "luxon";
 
 interface EventAttributes {
   id?: string;
   title: string;
   description?: string;
-  organizerId: number;
-  coOrganizers?: any[];
-  participants?: any[];
   maxParticipants?: number;
-  startDate: DateTime;
-  endDate: DateTime;
+  startDate: Date;
+  endDate: Date;
   mode: "virtual" | "Hybrid" | "in-person";
   location?: string;
   isPublic?: boolean;
   isCancelled?: boolean;
   isCompleted?: boolean;
-  isActive?: boolean;
-  createdAt?: DateTime;
-  updatedAt?: DateTime;
+  isDisabled?: boolean;
+  isDeleted?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 type EventCreationAttributes = Optional<
   EventAttributes,
@@ -27,12 +24,11 @@ type EventCreationAttributes = Optional<
   | "location"
   | "createdAt"
   | "updatedAt"
-  | "coOrganizers"
-  | "participants"
   | "maxParticipants"
   | "isPublic"
   | "isCancelled"
   | "isCompleted"
-  | "isActive"
+  | "isDisabled"
+  | "isDeleted"
 >;
 export { EventAttributes, EventCreationAttributes };
