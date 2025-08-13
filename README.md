@@ -40,19 +40,25 @@ http://localhost:5000/
    npm install
    ```
 
-3. **Configure environment variables:**
+3. Run the sql dev script to configure database
+
+   ```bash
+   sudo mysql -u root < ./dev_setup.sql
+   ```
+
+4. **Configure environment variables:**
 
    - Copy `.env.example` to `.env` and fill in your secrets and DB config.
      `
 
-4. **Start Redis and Mysql server:**
+5. **Start Redis and Mysql server:**
 
    ```bash
    redis-server
    sudo service mysql start
    ```
 
-5. **Start the application:**
+6. **Start the application:**
    ```bash
    npm run dev
    ```
