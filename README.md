@@ -14,6 +14,7 @@ http://localhost:5000/
 - Payment integration (mock)
 - Admin and user roles
 - Redis caching
+- more loading...
 
 ## Getting Started
 
