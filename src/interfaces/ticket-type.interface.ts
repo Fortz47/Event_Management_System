@@ -4,6 +4,8 @@ interface TicketTypeAttributes {
   id?: string;
   name: string;
   description: string;
+  price: number;
+  currency?: "NGN" | "USD" | "EUR";
   eventId: string;
   quantity: number;
   sale_start?: Date;
@@ -14,7 +16,7 @@ interface TicketTypeAttributes {
 
 type TicketTypeCreationAttributes = Optional<
   TicketTypeAttributes,
-  "id" | "sale_start" | "sale_end" | "createdAt" | "updatedAt"
+  "id" | "currency" | "sale_start" | "sale_end" | "createdAt" | "updatedAt"
 >;
 
 export { TicketTypeAttributes, TicketTypeCreationAttributes };
