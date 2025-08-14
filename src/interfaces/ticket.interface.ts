@@ -3,11 +3,11 @@ import { Optional } from "sequelize";
 interface TicketAttributes {
   id?: string;
   eventId: string;
-  userId?: number;
+  userId: number;
   ticketTypeId: string;
-  price: number;
-  reference?: string;
-  accessCode?: string;
+  // price: number;
+  reference: string;
+  accessCode: string;
   status: "pending" | "paid" | "failed";
   purchasedAt?: Date;
   isRefunded?: boolean;
@@ -17,16 +17,7 @@ interface TicketAttributes {
 
 type TicketCreationAttribute = Optional<
   TicketAttributes,
-  | "id"
-  | "userId"
-  | "ticketTypeId"
-  | "purchasedAt"
-  | "isRefunded"
-  | "createdAt"
-  | "updatedAt"
-  | "reference"
-  | "accessCode"
-  | "status"
+  "id" | "purchasedAt" | "isRefunded" | "createdAt" | "updatedAt" | "status"
 >;
 
 export { TicketAttributes, TicketCreationAttribute };
