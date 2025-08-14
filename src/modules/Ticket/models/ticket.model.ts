@@ -7,11 +7,11 @@ import {
 class Ticket extends Model<TicketAttributes, TicketCreationAttribute> {
   declare id: string;
   declare eventId: string;
-  declare userId?: number;
+  declare userId: number;
   declare ticketTypeId: string;
-  declare price: number;
-  declare reference?: string;
-  declare accessCode?: string;
+  // declare price: number;
+  declare reference: string;
+  declare accessCode: string;
   declare status: "pending" | "paid" | "failed";
   declare purchasedAt?: Date;
   declare isRefunded?: boolean;
@@ -38,21 +38,22 @@ class Ticket extends Model<TicketAttributes, TicketCreationAttribute> {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        price: {
-          type: DataTypes.FLOAT,
-          allowNull: false,
-        },
+        // price: {
+        //   type: DataTypes.FLOAT,
+        //   allowNull: false,
+        // },
         reference: {
           type: DataTypes.STRING,
-          allowNull: true,
+          allowNull: false,
         },
         status: {
           type: DataTypes.ENUM("pending", "paid", "failed"),
+          defaultValue: "pending",
           allowNull: false,
         },
         accessCode: {
           type: DataTypes.STRING,
-          allowNull: true,
+          allowNull: false,
         },
         purchasedAt: {
           type: DataTypes.DATE,
