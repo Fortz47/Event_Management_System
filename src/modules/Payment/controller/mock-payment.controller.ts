@@ -1,25 +1,24 @@
-// src/controllers/mockPayment.controller.ts
 import { Request, Response } from "express";
 import { MockPaymentService } from "../service/mock-payment.service";
-import Event from "../../Event/models/event.model";
-import User from "../../User/models/UserModel";
+import TicketTypeService from "../../Ticket/services/ticket-type.service";
 
 export class MockPaymentController {
   async initializePayment(req: Request, res: Response) {
     try {
       const user = req.user!;
-      const { eventId, amount } = req.body;
+      const { ticketTypeId } = req.body;
 
-      const event = await Event.findByPk(eventId);
-      if (!event) {
-        res.status(404).json({ error: "Event not found" });
+      const ticketType =
+        await TicketTypeService.getTicketTypeById(ticketTypeId);
+
+      if (!ticketType) {
+        res.status(404).json({ error: "Ticket type not found" });
         return;
       }
 
       const paymentData = await MockPaymentService.initializePayment(
-        user,
-        event,
-        amount
+        user.id,
+        ticketType
       );
 
       res.json({
