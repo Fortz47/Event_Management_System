@@ -1,35 +1,34 @@
-// src/services/mockPayment.service.ts
-import User from "../../User/models/UserModel";
-import Event from "../../Event/models/event.model";
 import Ticket from "../../Ticket/models/ticket.model";
+import TicketType from "../../Ticket/models/ticket-type.model";
+import TicketService from "../../Ticket/services/ticket.service";
 
 export class MockPaymentService {
   private static successRate = 0.8; // 80% success rate for realistic testing
 
   static async initializePayment(
-    user: User,
-    event: Event,
-    amount: number
+    userId: number,
+    ticketType: TicketType
   ): Promise<{
     paymentUrl: string;
     reference: string;
     accessCode: string;
   }> {
-    const reference = `MOCK-${event.id}-${user.id}-${Date.now()}`;
+    const reference = `MOCK-${ticketType.id}-${userId}-${Date.now()}`;
     const accessCode = Math.random().toString(36).substring(2, 10);
 
-    // Store payment intent in database
-    await Ticket.create({
-      eventId: event.id,
-      userId: user.id,
+    const ticketData = {
+      eventId: ticketType.eventId,
+      userId,
       reference,
-      price: amount,
-      status: "pending",
+      ticketTypeId: ticketType.id!,
       accessCode,
-    });
+    };
+
+    // Store payment intent in database
+    await TicketService.generateTicket(ticketData);
 
     return {
-      paymentUrl: `${process.env.API_URL}/payments/mock/verify?reference=${reference}`,
+      paymentUrl: `${process.env.API_BASE_URL}/payments/mock/verify?reference=${reference}`,
       reference,
       accessCode,
     };
@@ -38,7 +37,6 @@ export class MockPaymentService {
   static async verifyPayment(reference: string): Promise<{
     status: "success" | "failed";
     reference: string;
-    amount: number;
     purchasedAt: string;
     metadata: {
       eventId: string;
@@ -65,7 +63,6 @@ export class MockPaymentService {
     return {
       status: isSuccess ? "success" : "failed",
       reference,
-      amount: ticket.price,
       purchasedAt: ticket.purchasedAt?.toISOString() || "",
       metadata: {
         eventId: ticket.eventId,
