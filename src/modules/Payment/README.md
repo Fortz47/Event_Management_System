@@ -6,5 +6,5 @@
 }
 ```
 
-2. GET /api/payments/verify?reference=str
+2. GET /api/payments/mock/verify?reference=str
 3. GET /api/payments/history
