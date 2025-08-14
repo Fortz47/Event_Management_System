@@ -15,12 +15,12 @@ class TicketRouter extends TicketController {
   }
 
   private initializeRoutes() {
-    this.router.post("/", this.createTicket);
+    // this.router.post("/", this.createTicket);
     this.router.get("/:id", this.getTicketById);
     this.router.get("/", this.getTicketsByUserId);
     this.router.get("/events/:eventId", this.getTicketsByEventIdAndUserId);
-    this.router.put("/:id", this.updateTicket);
-    this.router.delete("/:id", this.deleteTicket);
+    // this.router.patch("/:id", this.updateTicket);
+    // this.router.delete("/:id", this.deleteTicket);
     // this.router.get("/", this.getAllTickets);
   }
 }
