@@ -12,6 +12,8 @@ class TicketType extends Model<
   declare name: string;
   declare description: string;
   declare eventId: string;
+  declare price: number;
+  declare currency: "NGN" | "USD" | "EUR";
   declare quantity: number;
   declare sale_start?: Date;
   declare sale_end?: Date;
@@ -28,6 +30,11 @@ class TicketType extends Model<
         },
         name: { type: DataTypes.STRING, allowNull: false },
         description: { type: DataTypes.STRING, allowNull: false },
+        price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+        currency: {
+          type: DataTypes.ENUM("NGN", "USD", "EUR"),
+          defaultValue: "NGN",
+        },
         eventId: { type: DataTypes.STRING, allowNull: false },
         quantity: { type: DataTypes.INTEGER, allowNull: false },
         sale_start: { type: DataTypes.DATE, allowNull: true },
